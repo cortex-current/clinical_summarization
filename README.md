@@ -72,5 +72,5 @@ pip install -r requirements.txt
 
 ## Reference
 I have learnt about the model training pipeline and GitHub actions deployment concepts from the tutorial by Bappy Ahmed: https://www.youtube.com/watch?v=p7V4Aa7qEpw.
---------
+
 
