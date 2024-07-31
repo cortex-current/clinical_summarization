@@ -1,0 +1,33 @@
+data_root: data
+
+data_ingestion:
+  root_dir: data/data_ingestion
+  source_data_name: owkin/medical_knowledge_from_extracts
+  local_data_file: data/data_ingestion/dataset
+
+
+data_validation:
+  root_dir: data/data_validation
+  STATUS_FILE: data/data_validation/status.txt
+  ALL_REQUIRED_FILES: ["train", "test", "validation"]
+
+
+data_transformation:
+  root_dir: data/data_transformation
+  data_path: data/data_ingestion/dataset
+  tokenizer_name: Falconsai/medical_summarization
+  source_data_name: owkin/medical_knowledge_from_extracts
+
+
+model_training:
+  root_dir: data/model_training
+  data_path: data/data_transformation/dataset
+  model_ckpt: Falconsai/medical_summarization
+
+
+model_evaluation:
+  root_dir: data/model_evaluation
+  data_path: data/data_transformation/dataset
+  model_path: data/model_training/Falconsai-T5-model
+  tokenizer_path: data/model_training/tokenizer
+  metric_file_name: data/model_evaluation/metrics.csv
