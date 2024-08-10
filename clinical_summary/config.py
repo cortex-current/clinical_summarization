@@ -69,7 +69,7 @@ class ConfigurationManager:
 
 
     def get_model_training_config(self) -> ModelTrainingConfig:
-        config = self.config.model_trainer
+        config = self.config.model_training
         params = self.params.TrainingArguments
 
         create_directories([config.root_dir])
@@ -84,7 +84,7 @@ class ConfigurationManager:
             weight_decay = params.weight_decay,
             logging_steps = params.logging_steps,
             evaluation_strategy = params.evaluation_strategy,
-            eval_steps = params.evaluation_strategy,
+            eval_steps = params.eval_steps,
             save_steps = params.save_steps,
             gradient_accumulation_steps = params.gradient_accumulation_steps
         )

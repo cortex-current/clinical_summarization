@@ -1,10 +1,10 @@
-black
-flake8
-isort
-mkdocs
 pip
-python-dotenv
 tqdm
+python-box==7.0
+fastapi
+uvicorn
+ensure==1.0.2
+Jinja2==3.1.2
 transformers
 transformers[sentencepiece]
 datasets
@@ -13,12 +13,12 @@ rouge_score
 py7zr
 pandas
 nltk
+tqdm
+PyYAML
 matplotlib
 torch
 notebook
-PyYAML
-python-box==6.0.2
-fastapi==0.78.0
-uvicorn==0.18.3
-ensure==1.0.2
+boto3
+mypy-boto3-s3
+scikit-learn
 -e .

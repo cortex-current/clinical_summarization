@@ -5,7 +5,7 @@ from box.exceptions import BoxValueError
 import yaml
 from ensure import ensure_annotations
 import logging
-from box import ConfigBox
+from box import ConfigBox   # dot notation access
 from typing import Any 
 
 @dataclass(frozen=True)
