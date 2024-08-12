@@ -15,6 +15,20 @@ class DataTransformation:
         # Convert the dataset to a pandas DataFrame
         df = dataset['train'].to_pandas()
 
+        # Function to extract text between 'Input:' and 'Output:'
+        def extract_text_between(input_string):
+            try:
+                # Find the start of 'Input:' and end of 'Output:'
+                start = input_string.index('Input:') + len('Input:')
+                end = input_string.index('Output:')
+                return input_string[start:end].strip()  # Extract and trim whitespace
+            except ValueError:
+                return None  # Return None if 'Input:' or 'Output:' is not found
+
+        # Apply the function to the DataFrame column
+        df['Question'] = df['Question'].apply(extract_text_between)
+
+
         # Split the data into train and temp sets (80% train, 20% temp)
         train_df, temp_df = train_test_split(df, test_size=0.2, random_state=42)
 
@@ -37,10 +51,10 @@ class DataTransformation:
         return split_dataset
     
     def convert_examples_to_features(self,example_batch):
-        input_encodings = self.tokenizer(example_batch['Question'] , max_length = 1024, truncation = True )
+        input_encodings = self.tokenizer(example_batch['Question'], truncation = False, padding=True ) #max_length = 1024,
         
         with self.tokenizer.as_target_tokenizer():
-            target_encodings = self.tokenizer(example_batch['Answer'], max_length = 128, truncation = True )
+            target_encodings = self.tokenizer(example_batch['Answer'], max_length = 256,  truncation = False, padding=True) 
             
         return {
             'input_ids' : input_encodings['input_ids'],
