@@ -3,6 +3,7 @@ Complete and accurate clinical documentation is crucial for monitoring patient c
 
 Therefore, this project employs Huggingface's Falconsai T5 transformer model to summarize clinical patient reports. 
 Evaluation is done based on Rouge scores: https://clementbm.github.io/theory/2021/12/23/rouge-bleu-scores.html 
+GLiNER model : https://github.com/urchade/GLiNER
 
 ### Dataset
 This model is trained on the Huggingface dataset: https://huggingface.co/datasets/owkin/medical_knowledge_from_extracts.
