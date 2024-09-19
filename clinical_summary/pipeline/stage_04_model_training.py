@@ -3,6 +3,7 @@ from clinical_summary import logger, ModelTrainingConfig
 from transformers import TrainingArguments, Trainer
 from transformers import DataCollatorForSeq2Seq
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+from peft import PeftModel, get_peft_model, LoraConfig
 from datasets import load_dataset, load_from_disk
 import torch
 import os
@@ -15,6 +16,17 @@ class ModelTraining:
         device = "cuda" if torch.cuda.is_available() else "cpu"
         tokenizer = AutoTokenizer.from_pretrained(self.config.model_ckpt)
         model_T5 = AutoModelForSeq2SeqLM.from_pretrained(self.config.model_ckpt).to(device)
+
+        # Apply LoRA
+        lora_config = LoraConfig(
+            r=4,   # Rank of the adapter matrices
+            lora_alpha=16,  # Scaling factor
+            target_modules=["q", "v"],  # Targeting the query and value projection matrices of attention layers
+            lora_dropout=0.1,  # Dropout for the LoRA layers
+            bias="none"  # Do not apply LoRA to bias parameters
+        )
+        model_T5 = get_peft_model(model_T5, lora_config)
+
         seq2seq_data_collator = DataCollatorForSeq2Seq(tokenizer, model=model_T5)
         
         #loading data 
@@ -43,7 +55,7 @@ class ModelTraining:
         trainer.train()
 
         ## Save model
-        model_T5.save_pretrained(os.path.join(self.config.root_dir,"Falconsai-T5-model"))
+        model_T5.save_pretrained(os.path.join(self.config.root_dir,"flan-T5-finetuned"))
         ## Save tokenizer
         tokenizer.save_pretrained(os.path.join(self.config.root_dir,"tokenizer"))
 
@@ -57,3 +69,8 @@ class ModelTrainTrainingPipeline:
         model_training_config = config.get_model_training_config()
         model_training = ModelTraining(config=model_training_config)
         model_training.train()
+
+        
+
+        output_dir=self.config.root_dir
+    

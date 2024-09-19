@@ -15,19 +15,19 @@ data_validation:
 data_transformation:
   root_dir: data/data_transformation
   data_path: data/data_ingestion/dataset
-  tokenizer_name: Falconsai/medical_summarization
+  tokenizer_name: google/flan-t5-small
   source_data_name: owkin/medical_knowledge_from_extracts
 
 
 model_training:
   root_dir: data/model_training
   data_path: data/data_transformation/dataset
-  model_ckpt: Falconsai/medical_summarization
+  model_ckpt: google/flan-t5-small
 
 
 model_evaluation:
   root_dir: data/model_evaluation
   data_path: data/data_transformation/dataset
-  model_path: data/model_training/Falconsai-T5-model
+  model_path: data/model_training/flan-T5-finetuned
   tokenizer_path: data/model_training/tokenizer
   metric_file_name: data/model_evaluation/metrics.csv

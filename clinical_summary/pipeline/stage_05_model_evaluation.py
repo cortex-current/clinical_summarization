@@ -51,7 +51,7 @@ class ModelEvaluation:
         device = "cuda" if torch.cuda.is_available() else "cpu"
         tokenizer = AutoTokenizer.from_pretrained(self.config.tokenizer_path)
         model_T5 = AutoModelForSeq2SeqLM.from_pretrained(self.config.model_path).to(device)
-       
+        
         #loading data 
         dataset_pt = load_from_disk(self.config.data_path)
         rouge_names = ["rouge1", "rouge2", "rougeL", "rougeLsum"]
