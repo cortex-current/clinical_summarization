@@ -7,6 +7,34 @@ Evaluation is done based on Rouge scores: https://clementbm.github.io/theory/202
 ### Dataset
 This model is trained on the Huggingface dataset: https://huggingface.co/datasets/owkin/medical_knowledge_from_extracts.
 
+### Scores
+Rouge scores are low as shown below:
+|index|rouge1|rouge2|rougeL|rougeLsum|
+|---|---|---|---|---|
+|falconsai-finetuned|0\.0020408163265306124|0\.0|0\.0020408163265306124|0\.0020408163265306124|
+
+But the summary outputs look correct when evaluated manually. Here are some examples:
+#### sample 0
+Reference Summary:
+{'conditions': 'Psoriatic Arthritis', 'interventions': 'Drug: Adalimumab'}
+
+Model Summary:
+'conditions': 'Arthritis, Psoriatic', 'interventions'; 'Drug: Adalimumab'
+
+#### sample 5
+Reference Summary:
+{'conditions': 'Suicide', 'interventions': 'Behavioral: Attachment-Based Family Therapy|Behavioral: Enhanced Usual Care'}
+
+Model Summary:
+'conditions': 'Suicidal Ideation|Depression', 'interventions'; 'Behavioral: Attachment Based Family Therapy (ABFT)'
+
+#### sample 10
+Reference Summary:
+{'conditions': 'Acute Coronary Syndrome', 'interventions': 'Drug: Iodofiltic acid I 123'}
+
+Model Summary:
+'conditions': 'Coronary Artery Syndrome|Acute Coronary Syndrome|Chronic Insufficiency', 'interventions'. 'Drug: Iodofiltic Acid I 123'
+
 ## Project Organization
 <a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
@@ -71,8 +99,5 @@ source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 #### Install the required packages
 pip install -r requirements.txt
 
-
-## Reference
-I have learnt about the model training pipeline and GitHub actions deployment concepts from the tutorial by Bappy Ahmed: https://www.youtube.com/watch?v=p7V4Aa7qEpw.
 
 
