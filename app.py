@@ -53,4 +53,5 @@ async def predict_route(text: str):
 
 # This block runs the application using uvicorn on host 0.0.0.0 and port 8080 if the script is executed directly.
 if __name__=="__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    port = int(os.environ.get("PORT", 8080))  # Render uses PORT=10000, default to 8080 for local
+    uvicorn.run(app, host="0.0.0.0", port=port)
