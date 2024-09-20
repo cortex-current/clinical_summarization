@@ -99,5 +99,53 @@ source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 #### Install the required packages
 pip install -r requirements.txt
 
+## AWS deployment
+### 1. Login to the AWS account
 
+### 2. Create an IAM user for deployment
+1. Build a Docker image of the source code
+2. Push the Docker image to ECR to save it on AWS
+3. Launch an EC2 virtual machine
+4. Pull the Docker image from ECR to EC2
+5. Launch the Docker image on EC2
 
+Policies required for an IAM user:
+1. AmazonEC2ContainerRegistryFullAccess
+2. AmazonEC2FullAccess
+
+### 3. Create ECR repo to store/save docker image
+URI for ECR repository to save Docker image:
+405074955098.dkr.ecr.ap-south-1.amazonaws.com/clinical_summary
+
+### 4. Launch an EC2 Ubuntu machine instance
+
+### 5. Start EC2 machine and install Docker
+```
+#optional
+sudo apt-get update -y
+
+sudo apt-get upgrade
+
+#required
+curl -fsSL https://get.docker.com -o get-docker.sh
+
+sudo sh get-docker.sh
+
+sudo usermod -aG docker ubuntu
+
+newgrp docker
+```
+
+### 6. Configure the EC2 machine as a self-hosted runner
+On Github repository settings page > actions > runner > new self hosted runner > choose OS as Ubuntu > then run commands listed on the runner webpage line by line in the EC2 machine console
+
+### 7. Save Github secrets
+AWS_ACCESS_KEY_ID=
+
+AWS_SECRET_ACCESS_KEY=
+
+AWS_REGION = us-east-1
+
+AWS_ECR_LOGIN_URI = 405074955098.dkr.ecr.ap-south-1.amazonaws.com/clinical_summary
+
+ECR_REPOSITORY_NAME = clinical_summary

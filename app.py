@@ -24,7 +24,7 @@ async def load_model():
 async def index():
     return RedirectResponse(url="/docs")
 
-@app.post("/predict")
+@app.post("/summarize")
 async def predict_route(text: str):
     if model is None or tokenizer is None:
         raise HTTPException(status_code=500, detail="Model or tokenizer not loaded")
