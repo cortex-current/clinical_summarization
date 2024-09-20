@@ -146,6 +146,6 @@ AWS_SECRET_ACCESS_KEY=
 
 AWS_REGION = us-east-1
 
-AWS_ECR_LOGIN_URI = 405074955098.dkr.ecr.ap-south-1.amazonaws.com/clinical_summary
+AWS_ECR_LOGIN_URI = 405074955098.dkr.ecr.ap-south-1.amazonaws.com
 
 ECR_REPOSITORY_NAME = clinical_summary
