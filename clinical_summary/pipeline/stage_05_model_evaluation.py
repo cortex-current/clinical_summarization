@@ -1,7 +1,8 @@
 from clinical_summary.config import ConfigurationManager
 from clinical_summary import logger, ModelEvaluationConfig
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-from datasets import load_dataset, load_from_disk, load_metric
+from datasets import load_dataset, load_from_disk
+import evaluate
 import torch
 import pandas as pd
 from tqdm import tqdm
@@ -55,11 +56,11 @@ class ModelEvaluation:
         #loading data 
         dataset_pt = load_from_disk(self.config.data_path)
         rouge_names = ["rouge1", "rouge2", "rougeL", "rougeLsum"]
-        rouge_metric = load_metric('rouge')
+        rouge_metric = evaluate.load('rouge')
         score = self.calculate_metric_on_test_ds(
         dataset_pt['test'][0:10], rouge_metric, model_T5, tokenizer, batch_size = 2, column_text = 'Question', column_summary= 'Answer')
 
-        rouge_dict = dict((rn, score[rn].mid.fmeasure ) for rn in rouge_names )
+        rouge_dict = dict((rn, score[rn] ) for rn in rouge_names )
         df = pd.DataFrame(rouge_dict, index = ['Falconsai_T5'] )
         df.to_csv(self.config.metric_file_name, index=False)
 

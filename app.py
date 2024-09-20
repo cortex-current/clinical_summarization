@@ -1,14 +1,22 @@
-# app.py 
-from fastapi import FastAPI
 import uvicorn
-import sys
-import os
-from fastapi.templating import Jinja2Templates
+import torch
+from fastapi import FastAPI, HTTPException
 from starlette.responses import RedirectResponse
-from fastapi.responses import Response
-from clinical_summary.pipeline.prediction import PredictionPipeline
+from transformers import AutoTokenizer
 
 app = FastAPI()
+
+# Initialize tokenizer and model
+@app.on_event("startup")
+async def load_model():
+    global model, tokenizer
+    try:
+        # Load the model and tokenizer
+        model = torch.load('model_cpu_friendly.pth', map_location=torch.device('cpu'))
+        tokenizer = AutoTokenizer.from_pretrained('Falconsai/medical_summarization')
+        model.eval()  # Set the model to evaluation mode
+    except Exception as e:
+        raise RuntimeError(f"Error loading model: {e}")
 
 # This defines a GET endpoint at the root URL / with a tag "authentication". 
 # It redirects to the documentation page /docs using RedirectResponse.
@@ -16,29 +24,32 @@ app = FastAPI()
 async def index():
     return RedirectResponse(url="/docs")
 
-# This defines a GET endpoint at /train. When accessed, it attempts to run a training script (main.py). 
-# If successful, it returns a "Training successful !!" message. 
-# If an error occurs, it catches the exception and returns an error message.
-@app.get("/train")
-async def training():
-    try:
-        os.system("python main.py")
-        return Response("Training successful !!")
-
-    except Exception as e:
-        return Response(f"Error Occurred! {e}")
-
-# This defines a POST endpoint at /predict. 
-# It expects some text input, processes it using a PredictionPipeline object, and returns the predicted text. 
-# If an error occurs during the prediction, it raises the exception.
 @app.post("/predict")
-async def predict_route(text):
+async def predict_route(text: str):
+    if model is None or tokenizer is None:
+        raise HTTPException(status_code=500, detail="Model or tokenizer not loaded")
+
     try:
-        obj = PredictionPipeline()
-        text = obj.predict(text)
-        return text
+        # Preprocess the input text
+        inputs = tokenizer(text, return_tensors='pt', padding=True, truncation=False)
+        input_ids = inputs['input_ids']
+        attention_mask = inputs['attention_mask']
+
+        # Generate the output
+        with torch.no_grad():
+            outputs = model.generate(input_ids=input_ids, attention_mask=attention_mask,
+                                     max_length=256,  # Set max_length to desired value
+                                     min_length=50,   # Optionally set min_length if you want a minimum length
+                                     length_penalty=0.8,  # Optionally adjust length_penalty to control the length
+                                     num_beams=8)  # Optionally use beam search for better quality)
+        
+        # Decode the generated output
+        prediction = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+        return {"prediction": prediction}
     except Exception as e:
-        raise e
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 # This block runs the application using uvicorn on host 0.0.0.0 and port 8080 if the script is executed directly.
 if __name__=="__main__":

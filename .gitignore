@@ -1,6 +1,9 @@
 # Data
 /data/
 
+# model pytorch file
+*.pth 
+
 # Running logs
 logs/
 
