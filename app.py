@@ -1,22 +1,28 @@
 import uvicorn
-import torch
+import torch, os
 from fastapi import FastAPI, HTTPException
 from starlette.responses import RedirectResponse
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from contextlib import asynccontextmanager
 
-app = FastAPI()
-
-# Initialize tokenizer and model
-@app.on_event("startup")
-async def load_model():
-    global model, tokenizer
+# Define the lifespan event handler
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global model, tokenizer # global variables are loaded once during the application startup
     try:
-        # Load the model and tokenizer
-        model = torch.load('model_cpu_friendly.pth', map_location=torch.device('cpu'))
-        tokenizer = AutoTokenizer.from_pretrained('Falconsai/medical_summarization')
+        # Load the Hugging Face model and tokenizer
+        model = AutoModelForSeq2SeqLM.from_pretrained('manoramak/finetuned-clinical-summarizer')
+        tokenizer = AutoTokenizer.from_pretrained('manoramak/finetuned-clinical-summarizer')
         model.eval()  # Set the model to evaluation mode
+        print("Model and tokenizer loaded successfully")
+        yield
     except Exception as e:
-        raise RuntimeError(f"Error loading model: {e}")
+        raise RuntimeError(f"Error loading model or tokenizer: {e}")
+    finally:
+        print("Shutting down application")
+
+# Create the FastAPI app with the lifespan event handler
+app = FastAPI(lifespan=lifespan)
 
 # This defines a GET endpoint at the root URL / with a tag "authentication". 
 # It redirects to the documentation page /docs using RedirectResponse.
@@ -24,6 +30,7 @@ async def load_model():
 async def index():
     return RedirectResponse(url="/docs")
 
+# Define the summarize route
 @app.post("/summarize")
 async def predict_route(text: str):
     if model is None or tokenizer is None:
@@ -41,7 +48,7 @@ async def predict_route(text: str):
                                      max_length=256,  # Set max_length to desired value
                                      min_length=50,   # Optionally set min_length if you want a minimum length
                                      length_penalty=0.8,  # Optionally adjust length_penalty to control the length
-                                     num_beams=8)  # Optionally use beam search for better quality)
+                                     num_beams=8)  # Optionally use beam search for better quality
         
         # Decode the generated output
         prediction = tokenizer.decode(outputs[0], skip_special_tokens=True)
