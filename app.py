@@ -1,14 +1,17 @@
 import uvicorn
 import torch, os
-from fastapi import FastAPI, HTTPException
-from starlette.responses import RedirectResponse
+from fastapi import FastAPI, HTTPException, Request, Form
+from starlette.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from contextlib import asynccontextmanager
+# Jinja2 Templates: Used for rendering HTML, displaying the input text, and showing the summarization result.
 
 # Define the lifespan event handler
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global model, tokenizer # global variables are loaded once during the application startup
+    global model, tokenizer
     try:
         # Load the Hugging Face model and tokenizer
         model = AutoModelForSeq2SeqLM.from_pretrained('manoramak/finetuned-clinical-summarizer')
@@ -24,15 +27,21 @@ async def lifespan(app: FastAPI):
 # Create the FastAPI app with the lifespan event handler
 app = FastAPI(lifespan=lifespan)
 
-# This defines a GET endpoint at the root URL / with a tag "authentication". 
-# It redirects to the documentation page /docs using RedirectResponse.
-@app.get("/", tags=["authentication"])
-async def index():
-    return RedirectResponse(url="/docs")
+# Serve the static directory for any static files (e.g., CSS)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Define the summarize route
-@app.post("/summarize")
-async def predict_route(text: str):
+# Set up templates directory using Jinja2
+# Used for rendering HTML, displaying the input text, and showing the summarization result.
+templates = Jinja2Templates(directory="templates")
+
+# Route to serve the index HTML page
+@app.get("/", response_class=HTMLResponse)
+async def get_form(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+# Define the summarize route for the form POST submission
+@app.post("/summarize", response_class=HTMLResponse)
+async def predict_route(request: Request, text: str = Form(...)):
     if model is None or tokenizer is None:
         raise HTTPException(status_code=500, detail="Model or tokenizer not loaded")
 
@@ -49,16 +58,19 @@ async def predict_route(text: str):
                                      min_length=50,   # Optionally set min_length if you want a minimum length
                                      length_penalty=0.8,  # Optionally adjust length_penalty to control the length
                                      num_beams=8)  # Optionally use beam search for better quality
-        
+
         # Decode the generated output
         prediction = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-        return {"prediction": prediction}
+        # Render the result back to the HTML page
+        return templates.TemplateResponse("index.html", {
+            "request": request, "prediction": prediction, "input_text": text
+        })
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
-# This block runs the application using uvicorn on host 0.0.0.0 and port 8080 if the script is executed directly.
-if __name__=="__main__":
-    port = int(os.environ.get("PORT", 8080))  # Render uses PORT=10000, default to 8080 for local
+# Run the application
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
     uvicorn.run(app, host="0.0.0.0", port=port)

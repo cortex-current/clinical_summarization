@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient report summary</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Patient report summary</h1>
+        <form action="/summarize" method="post">
+            <textarea name="text" rows="10" cols="70" placeholder="Enter text to summarize...">{{ input_text | default('') }}</textarea>
+            <br><br>
+            <button type="submit">Summarize</button>
+        </form>
+
+        {% if prediction %}
+        <h2>Summary:</h2>
+        <p>{{ prediction }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
