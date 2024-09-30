@@ -64,12 +64,16 @@ Model Summary:
 |                         most cases, because YAML has better readability and is more user-friendly.
 │
 ├── params.yaml        <- stores easily accessible model tuning parameters.
+|
+├── .github/workflows/main.yaml  <- CI/CD pipeline
 │
 ├── Dockerfile         <- A text document that contains all the instructions to assemble a Docker image.
 ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
 │                         generated with `pip freeze > requirements.txt`
 │
-├── webpage            <- files for rendering webpage for interacting with the model
+├── templates/index.html<- API for interacting with the model
+|
+├── static/style.css   <- stores CSS styling specifications
 │
 └── clinical_summary   <- Source code for use in this project.
     │
@@ -121,12 +125,12 @@ URI for ECR repository to save Docker image:
 
 ### 5. Start EC2 machine and install Docker
 ```
-#optional
+# optional
 sudo apt-get update -y
 
 sudo apt-get upgrade
 
-#required
+# required
 curl -fsSL https://get.docker.com -o get-docker.sh
 
 sudo sh get-docker.sh
@@ -138,6 +142,8 @@ newgrp docker
 
 ### 6. Configure the EC2 machine as a self-hosted runner
 On Github repository settings page > actions > runner > new self hosted runner > choose OS as Ubuntu > then run commands listed on the runner webpage line by line in the EC2 machine console
+
+If restarted the machine, just change directory to 'actions-runner' and run the GitHub Actions self-hosted runner using the command './run.sh'. To stop the runner execution, press Ctrl+C.
 
 ### 7. Save Github secrets
 AWS_ACCESS_KEY_ID=
