@@ -16,9 +16,9 @@ async def lifespan(app: FastAPI):
         # Load the Hugging Face model and tokenizer
         model = AutoModelForSeq2SeqLM.from_pretrained('manoramak/finetuned-clinical-summarizer')
         tokenizer = AutoTokenizer.from_pretrained('manoramak/finetuned-clinical-summarizer')
-        model.eval()  # Set the model to evaluation mode
+        model.eval()  # Set the model to evaluation mode to ensure it's not trained further during inference.
         print("Model and tokenizer loaded successfully")
-        yield
+        yield # pauses the execution until the app finishes running, after which it will print "Shutting down application".
     except Exception as e:
         raise RuntimeError(f"Error loading model or tokenizer: {e}")
     finally:
@@ -57,7 +57,9 @@ async def predict_route(request: Request, text: str = Form(...)):
                                      max_length=256,  # Set max_length to desired value
                                      min_length=50,   # Optionally set min_length if you want a minimum length
                                      length_penalty=0.8,  # Optionally adjust length_penalty to control the length
+                                     # (lower values lead to shorter summaries).
                                      num_beams=8)  # Optionally use beam search for better quality
+                                     # higher values usually result in better summaries but slower performance).
 
         # Decode the generated output
         prediction = tokenizer.decode(outputs[0], skip_special_tokens=True)
