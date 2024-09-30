@@ -143,7 +143,7 @@ newgrp docker
 ### 6. Configure the EC2 machine as a self-hosted runner
 On Github repository settings page > actions > runner > new self hosted runner > choose OS as Ubuntu > then run commands listed on the runner webpage line by line in the EC2 machine console
 
-If restarted the machine, just change directory to 'actions-runner' and run the GitHub Actions self-hosted runner using the command './run.sh'. To stop the runner execution, press Ctrl+C.
+If restarted the machine, just change directory to 'actions-runner' and run the GitHub Actions self-hosted runner using the command './run.sh'. To stop the runner execution, press Ctrl+C. Whenever you push some changes in your GitHub repo, the actions runner will deploy the changes in AWS machine.
 
 ### 7. Save Github secrets
 AWS_ACCESS_KEY_ID=
