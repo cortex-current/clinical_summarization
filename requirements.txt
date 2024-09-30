@@ -1,5 +1,5 @@
 pip==24.1.2
-pyarrow
+pyarrow==15.0.0
 python-box==7.0
 fastapi==0.115.0
 uvicorn==0.30.6
