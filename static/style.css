@@ -12,8 +12,17 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+/*
+.container: This applies styles to the <div class="container"> element that wraps all the content.
+max-width: 600px;: Limits the container’s width to 600 pixels, ensuring it doesn't get too wide.
+margin: 0 auto;: Centers the container horizontally by setting equal margins on the left and right.
+padding: 20px;: Adds 20 pixels of padding inside the container, ensuring the content doesn’t touch the edges.
+background-color: #fff;: Sets a white background for the container.
+border-radius: 8px;: Rounds the corners of the container with an 8-pixel radius.
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);: Adds a subtle shadow around the container for a 3D effect.
+*/
 
-h1 {
+h1 {    /* main heading tag h1 */
     text-align: center;
 }
 
@@ -24,6 +33,14 @@ textarea {
     border: 1px solid #ddd;
     border-radius: 4px;
 }
+/*
+textarea: Styles the text input box.
+width: 100%;: Makes the textarea span the full width of the container.
+padding: 10px;: Adds padding inside the textarea to make the text look more spaced out.
+font-size: 16px;: Sets the font size to 16 pixels.
+border: 1px solid #ddd;: Adds a light gray border around the textarea.
+border-radius: 4px;: Rounds the corners of the textarea by 4 pixels.
+*/
 
 button {
     padding: 10px 20px;
@@ -34,6 +51,16 @@ button {
     border-radius: 4px;
     cursor: pointer;
 }
+/*
+button: Styles the "Summarize" button.
+padding: 10px 20px;: Adds 10 pixels of padding on the top and bottom and 20 pixels on the sides to make the button larger.
+font-size: 16px;: Sets the font size of the button text to 16 pixels.
+background-color: #4CAF50;: Sets the background color of the button to green.
+color: white;: Makes the text on the button white.
+border: none;: Removes any default borders around the button.
+border-radius: 4px;: Rounds the corners of the button by 4 pixels.
+cursor: pointer;: Changes the cursor to a pointer (hand icon) when hovering over the button.
+*/
 
 button:hover {
     background-color: #45a049;
@@ -43,9 +70,20 @@ h2 {
     margin-top: 20px;
     color: #333;
 }
+/*
+h2: Styles the "Summary" heading.
+margin-top: 20px;: Adds space above the heading to separate it from the rest of the content.
+color: #333;: Sets the color to a dark gray.
+*/
 
 p {
     font-size: 18px;
     line-height: 1.6;
     color: #555;
 }
+/*
+p: Styles the paragraph that shows the summary.
+font-size: 18px;: Sets the font size to 18 pixels.
+line-height: 1.6;: Sets the space between lines to 1.6 times the font size (increases readability).
+color: #555;: Sets the text color to a medium gray.
+*/
