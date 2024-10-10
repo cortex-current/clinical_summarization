@@ -15,9 +15,6 @@ RUN pip install --upgrade pip
 
 # Install the dependencies
 RUN pip install -r requirements.txt
-# RUN pip install --upgrade accelerate
-# RUN pip uninstall -y transformers accelerate
-# RUN pip install transformers accelerate
 
 # Command to run the FastAPI server
 CMD ["python3", "app.py"]
