@@ -48,6 +48,7 @@ Model Summary:
 ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
 │                         the creator's initials, and a short `-` delimited description, e.g.
 │                         `1.0-jqp-initial-data-exploration`.
+├── venv               <- virtual environment directory
 │
 ├── logs               <- contains logs saved after running various scripts.
 ├── pyproject.toml     <- Project configuration file with package metadata for clinical_summary
