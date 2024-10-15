@@ -12,7 +12,7 @@ COPY app.py /app/
 # COPY main.py /app/
 # COPY config.yaml /app/
 # COPY params.yaml /app/
-# COPY .github/workflows /app/
+COPY .github/workflows /app/
 COPY requirements.txt /app/
 # COPY clinical_summary /app/clinical_summary
 COPY templates /app/templates
