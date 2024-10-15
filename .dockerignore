@@ -14,7 +14,10 @@ Makefile
 LICENSE
 
 # Ignore model training scripts (unless needed for retraining)
-clinical_summary/pipeline/
+clinical_summary/
+config.yaml
+params.yaml
+main.py
 
 # Ignore pycache and temporary files
 __pycache__/
