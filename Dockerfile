@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9.20-slim
+FROM python:3.11-slim
 
 # admin can update packages and install AWS command line interface
 RUN apt update -y && apt install awscli -y
