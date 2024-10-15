@@ -18,6 +18,7 @@ COPY requirements.txt /app/
 # COPY clinical_summary /app/clinical_summary
 COPY templates /app/templates
 COPY static /app/static
+COPY README.md /app/
 
 # Upgrade pip to the latest version
 RUN pip install --upgrade pip
