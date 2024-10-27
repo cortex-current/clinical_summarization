@@ -86,9 +86,9 @@ jobs:
         run: |
          docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
          
-      # - name: Stop and remove container if running
-      #   run: |
-      #    docker ps -q --filter "name=cy" | grep -q . && docker stop clinical_summary && docker rm -fv clinical_summary
+      - name: Stop and remove container if running
+        run: |
+         docker ps -q --filter "name=cy" | grep -q . && docker stop clinical_summary && docker rm -fv clinical_summary
 
       - name: Prune unused containers, images, and volumes
         run: |
