@@ -8,18 +8,6 @@ RUN apt update -y && apt install awscli -y
 WORKDIR /app
 
 COPY . /app/
-# Copy only the necessary files for the application
-# COPY app.py /app/
-# # COPY main.py /app/
-# # COPY config.yaml /app/
-# # COPY params.yaml /app/
-# COPY pyproject.toml /app/
-# COPY .github/workflows /app/
-# COPY requirements.txt /app/
-# # COPY clinical_summary /app/clinical_summary
-# COPY templates /app/templates
-# COPY static /app/static
-# COPY README.md /app/
 
 # Upgrade pip to the latest version
 RUN pip install --upgrade pip
