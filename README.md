@@ -156,3 +156,15 @@ AWS_REGION = ap-south-1
 AWS_ECR_LOGIN_URI = 405074955098.dkr.ecr.ap-south-1.amazonaws.com
 
 ECR_REPOSITORY_NAME = clinical_summary
+
+#### website hosting on AWS
+1. Configure your security group (ssh port 22 for admin only) and (http port 80 for normal traffic i.e. 0.0.0.0/0).
+2. Install the httpd webserver in EC2 machine used to run webapp.
+```
+sudo su
+yum update -y
+yum install httpd -y
+cd var/www/html
+```
+3. Create a website and type 'service httpd start'.
+4. Access the website on your browser using EC2 public IP or DNS.
