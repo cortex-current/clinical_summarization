@@ -159,12 +159,6 @@ ECR_REPOSITORY_NAME = clinical_summary
 
 #### website hosting on AWS
 1. Configure your security group (ssh port 22 for admin only) and (http port 80 for normal traffic i.e. 0.0.0.0/0).
-2. Install the httpd webserver in EC2 machine used to run webapp.
-```
-sudo su
-yum update -y
-yum install httpd -y
-cd var/www/html
-```
-3. Create a website and type 'service httpd start'.
-4. Access the website on your browser using EC2 public IP or DNS.
+2. Check Docker status using 'docker ps'. Copy the instance name and type 'docker logs clinical_summary'. This will show if uvicorn is running on http://0.0.0.0:8080.
+3. Some lines like INFO: 180.244.214.131:60779 - "GET / HTTP/1.1" 200 OK show that your server is responding with 200 OK to requests at /. This means that requests to your server are reaching it successfully, both locally (from 172.17.0.1, which is Docker’s internal IP) and externally.
+4. Open a web browser and access your EC2 public IPv4 address or DNS.
